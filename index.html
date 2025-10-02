@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catalogue Professionnel | Nouvelles Acquisitions 2025</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <style>
+    /* Styles intégrés pour la performance */
+    :root {
+      --primary-color: #2c3e50;
+      --secondary-color: #34495e;
+      --accent-color: #e74c3c;
+      --gold-color: #d4af37;
+      --light-color: #ecf0f1;
+      --dark-color: #2c3e50;
+      --page-bg: #1a1a1a;
+      --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.1);
+      --shadow-strong: 0 20px 60px rgba(0, 0, 0, 0.3);
+      --transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      color: var(--light-color);
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+      width: 100%;
+    }
+
+    .header-content {
+      margin-bottom: 25px;
+    }
+
+    .titre {
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: white;
+      text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .titre i {
+      color: var(--gold-color);
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    }
+
+    .subtitle {
+      font-size: 1.3rem;
+      color: rgba(255,255,255,0.8);
+      font-weight: 300;
+    }
+
+    .navigation {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 25px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 15px 30px;
+      border-radius: 50px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      margin-bottom: 20px;
+    }
+
+    .nav-btn {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 55px;
+      height: 55px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .nav-btn:hover::before {
+      left: 100%;
+    }
+
+    .nav-btn:hover:not(:disabled) {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: var(--shadow-strong);
+    }
+
+    .nav-btn:active {
+      transform: translateY(-1px);
+    }
+
+    .nav-btn:disabled {
+      background: #95a5a6;
+      cursor: not-allowed;
+      transform: none;
+      opacity: 0.5;
+    }
+
+    .nav-btn i {
+      font-size: 1.2rem;
+      filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2));
+    }
+
+    .quick-nav {
+      background: rgba(255,255,255,0.2);
+    }
+
+    .page-counter {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: white;
+      padding: 12px 20px;
+      border-radius: 25px;
+      box-shadow: var(--shadow-soft);
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+
+    .counter-text {
+      font-size: 0.9rem;
+    }
+
+    .current-page {
+      color: var(--accent-color);
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .counter-separator {
+      color: #bdc3c7;
+    }
+
+    .total-pages {
+      font-size: 1.1rem;
+    }
+
+    /* Indicateur de chargement */
+    .loading-status {
+      margin-top: 15px;
+      text-align: center;
+      color: rgba(255,255,255,0.9);
+    }
+
+    .progress-bar {
+      width: 300px;
+      height: 8px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 4px;
+      margin: 10px auto;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #3498db, #2ecc71);
+      border-radius: 4px;
+      transition: width 0.5s ease;
+      width: 0%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .progress-fill::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    .main-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      position: relative;
+    }
+
+    .book-container {
+      position: relative;
+      width: 85vw;
+      max-width: 1200px;
+      height: 75vh;
+      perspective: 1800px;
+    }
+
+    .book-shadow {
+      position: absolute;
+      width: 110%;
+      height: 120%;
+      background: radial-gradient(ellipse at center, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 70%);
+      filter: blur(20px);
+      z-index: -1;
+      top: -10%;
+      left: -5%;
+    }
+
+    .book {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+    }
+
+    .page {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      transform-origin: left center;
+      transition: var(--transition);
+      cursor: pointer;
+      overflow: hidden;
+      border-radius: 8px;
+      background: var(--page-bg);
+      box-shadow: var(--shadow-strong);
+      will-change: transform;
+      backface-visibility: hidden;
+    }
+
+    .page-content {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      background: var(--page-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .image-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    /* Système de redimensionnement intelligent */
+    .page-image {
+      transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      opacity: 0;
+      transform: scale(0.95);
+    }
+
+    .page-image.loaded {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Classes de redimensionnement automatique */
+    .page-image.portrait {
+      height: 95%;
+      width: auto;
+      max-width: 95%;
+    }
+
+    .page-image.landscape {
+      width: 95%;
+      height: auto;
+      max-height: 95%;
+    }
+
+    .page-image.square {
+      width: 90%;
+      height: 90%;
+      object-fit: contain;
+    }
+
+    /* Animation de tournage de page */
+    .page.flipped {
+      transform: rotateY(-180deg) scale(1.02);
+      box-shadow: 
+        -15px 0 30px rgba(0, 0, 0, 0.4),
+        inset 1px 0 0 rgba(255,255,255,0.1);
+      z-index: 100;
+    }
+
+    .page.flipped .page-content {
+      transform: scaleX(-1);
+    }
+
+    .page.flipped .page-image {
+      transform: scaleX(-1) scale(1.02);
+    }
+
+    /* Loader pour les images */
+    .image-loader {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 50px;
+      height: 50px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-top: 3px solid var(--gold-color);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      z-index: 1;
+    }
+
+    @keyframes spin {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+      width: 100%;
+    }
+
+    .footer-content {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .instructions {
+      font-size: 1rem;
+      color: white;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 15px 30px;
+      border-radius: 25px;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .instructions i {
+      color: var(--gold-color);
+    }
+
+    .load-hint {
+      font-size: 0.9em;
+      color: #f39c12;
+      transition: color 0.3s ease;
+    }
+
+    
+
+    /* Coins décoratifs */
+    .page-corner {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      background: linear-gradient(135deg, transparent 50%, var(--gold-color) 50%);
+      z-index: 3;
+    }
+
+    .page-corner-tl { top: 0; left: 0; }
+    .page-corner-tr { top: 0; right: 0; transform: rotate(90deg); }
+    .page-corner-bl { bottom: 0; left: 0; transform: rotate(-90deg); }
+    .page-corner-br { bottom: 0; right: 0; transform: rotate(180deg); }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .book-container {
+        width: 90vw;
+        height: 70vh;
+      }
+      
+      .titre {
+        font-size: 2.4rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .titre {
+        font-size: 2rem;
+      }
+      
+      .book-container {
+        width: 95vw;
+        height: 60vh;
+        perspective: 1200px;
+      }
+      
+      .navigation {
+        gap: 15px;
+        padding: 12px 20px;
+      }
+      
+      .nav-btn {
+        width: 45px;
+        height: 45px;
+      }
+      
+      .progress-bar {
+        width: 250px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 15px 10px;
+      }
+      
+      .titre {
+        font-size: 1.8rem;
+        flex-direction: column;
+        gap: 8px;
+      }
+      
+      .subtitle {
+        font-size: 1.1rem;
+      }
+      
+      .book-container {
+        height: 50vh;
+      }
+      
+      .navigation {
+        gap: 10px;
+        padding: 10px 15px;
+      }
+      
+      .page-counter {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+      }
+      
+      .nav-btn {
+        width: 40px;
+        height: 40px;
+      }
+      
+      .instructions {
+        font-size: 0.9rem;
+        padding: 12px 20px;
+      }
+      
+      .progress-bar {
+        width: 200px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-content">
+      <h1 class="titre">
+        <i class="fas fa-gem"></i>
+        CATALOGUE DES NOUVELLES ACQUISITIONS 2025
+      </h1>
+      <div class="subtitle">Découvrez notre sélection exclusive</div>
+    </div>
+    
+    <div class="navigation">
+      <button id="firstBtn" class="nav-btn quick-nav" title="Première page">
+        <i class="fas fa-fast-backward"></i>
+      </button>
+      <button id="prevBtn" class="nav-btn" aria-label="Page précédente">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <div class="page-counter">
+        <span class="counter-text">Page</span>
+        <span id="currentPage" class="current-page">1</span>
+        <span class="counter-separator">/</span>
+        <span id="totalPages" class="total-pages">64</span>
+      </div>
+      <button id="nextBtn" class="nav-btn" aria-label="Page suivante">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+      <button id="lastBtn" class="nav-btn quick-nav" title="Dernière page">
+        <i class="fas fa-fast-forward"></i>
+      </button>
+    </div>
+
+    <!-- Indicateur de chargement -->
+    <div class="loading-status">
+      <span id="loadedInfo">Chargement: 0/64 pages</span>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+  </header>
+  
+  <main class="main-content">
+    <div class="book-container">
+      <div class="book-shadow"></div>
+      <div class="book">
+  <!-- Page 1 -->
+  <div class="page" data-page="0">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-0.jpg" alt="Page 1" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <!-- Page 2 -->
+  <div class="page" data-page="1">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-1.jpg" alt="Page 2" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <!-- Page 3 -->
+  <div class="page" data-page="2">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-2.jpg" alt="Page 3" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <!-- Page 4 -->
+  <div class="page" data-page="3">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-3.jpg" alt="Page 4" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <!-- Page 5 -->
+  <div class="page" data-page="4">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-4.jpg" alt="Page 5" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <!-- Page 6 -->
+  <div class="page" data-page="5">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-5.jpg" alt="Page 6" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <!-- Page 7 -->
+  <div class="page" data-page="6">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-6.jpg" alt="Page 7" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <!-- Page 8 -->
+  <div class="page" data-page="7">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-7.jpg" alt="Page 8" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <!-- Page 9 -->
+  <div class="page" data-page="8">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-8.jpg" alt="Page 9" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <!-- Page 10 -->
+  <div class="page" data-page="9">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-9.jpg" alt="Page 10" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <!-- Page 11 -->
+  <div class="page" data-page="10">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-10.jpg" alt="Page 11" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <!-- Page 12 -->
+  <div class="page" data-page="11">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-11.jpg" alt="Page 12" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <!-- CONTINUER COMME ÇA JUSQU'À LA PAGE 64 -->
+  
+  <!-- Page 13 à 20 -->
+  <div class="page" data-page="12">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-12.jpg" alt="Page 13" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="13">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-13.jpg" alt="Page 14" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="14">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-14.jpg" alt="Page 15" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="15">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-15.jpg" alt="Page 16" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="16">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-16.jpg" alt="Page 17" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="17">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-17.jpg" alt="Page 18" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="18">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-18.jpg" alt="Page 19" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="19">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-19.jpg" alt="Page 20" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <!-- Page 21 à 30 -->
+  <div class="page" data-page="20">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-20.jpg" alt="Page 21" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="21">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-21.jpg" alt="Page 22" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="22">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-22.jpg" alt="Page 23" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="23">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-23.jpg" alt="Page 24" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="24">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-24.jpg" alt="Page 25" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="25">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-25.jpg" alt="Page 26" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="26">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-26.jpg" alt="Page 27" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="27">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-27.jpg" alt="Page 28" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="28">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-28.jpg" alt="Page 29" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="29">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-29.jpg" alt="Page 30" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <!-- Page 31 à 40 -->
+  <div class="page" data-page="30">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-30.jpg" alt="Page 31" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="31">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-31.jpg" alt="Page 32" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="32">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-32.jpg" alt="Page 33" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="33">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-33.jpg" alt="Page 34" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="34">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-34.jpg" alt="Page 35" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="35">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-35.jpg" alt="Page 36" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="36">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-36.jpg" alt="Page 37" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="37">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-37.jpg" alt="Page 38" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="38">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-38.jpg" alt="Page 39" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="39">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-39.jpg" alt="Page 40" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <!-- Page 41 à 50 -->
+  <div class="page" data-page="40">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-40.jpg" alt="Page 41" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="41">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-41.jpg" alt="Page 42" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="42">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-42.jpg" alt="Page 43" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="43">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-43.jpg" alt="Page 44" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="44">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-44.jpg" alt="Page 45" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="45">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-45.jpg" alt="Page 46" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="46">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-46.jpg" alt="Page 47" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="47">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-47.jpg" alt="Page 48" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="48">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-48.jpg" alt="Page 49" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="49">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-49.jpg" alt="Page 50" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <!-- Page 51 à 60 -->
+  <div class="page" data-page="50">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-50.jpg" alt="Page 51" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="51">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-51.jpg" alt="Page 52" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="52">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-52.jpg" alt="Page 53" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="53">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-53.jpg" alt="Page 54" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="54">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-54.jpg" alt="Page 55" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="55">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-55.jpg" alt="Page 56" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="56">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-56.jpg" alt="Page 57" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="57">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-57.jpg" alt="Page 58" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="58">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-58.jpg" alt="Page 59" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="59">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-59.jpg" alt="Page 60" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <!-- Page 61 à 64 (les 4 dernières) -->
+  <div class="page" data-page="60">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-60.jpg" alt="Page 61" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="61">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-61.jpg" alt="Page 62" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="62">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-62.jpg" alt="Page 63" class="page-image">
+      </div>
+    </div>
+  </div>
+  
+  <div class="page" data-page="63">
+    <div class="page-content">
+      <div class="image-container">
+        <img data-src="images/bookPDF-images-63.jpg" alt="Page 64" class="page-image">
+      </div>
+    </div>
+  </div>
+</div>
+        
+        <!-- Répétez la structure pour les 55 pages restantes -->
+        <!-- ... -->
+        
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <p class="instructions">
+        <i class="fas fa-mouse-pointer"></i>
+        Cliquez sur les pages ou utilisez les flèches pour naviguer
+        <span class="load-hint" id="loadHint"> | Chargement intelligent activé</span>
+      </p>
+    </div>
+  </footer>
+  
+  <script>
+    // Script complet avec lazy loading et redimensionnement intelligent
+    class ProfessionalCatalog {
+      constructor() {
+        this.pages = document.querySelectorAll('.page');
+        this.totalPages = this.pages.length;
+        this.currentPage = 0;
+        this.isAnimating = false;
+        
+        // Configuration du lazy loading
+        this.loadGroupSize = 10;
+        this.preloadAhead = 2;
+        this.loadedGroups = new Set();
+        
+        this.init();
+      }
+      
+      init() {
+        this.setupInitialState();
+        this.setupNavigation();
+        this.setupLazyLoading();
+        this.updateUI();
+        
+        // Charge le premier groupe
+        this.loadGroup(0);
+      }
+      
+      setupInitialState() {
+        this.pages.forEach((page, index) => {
+          page.style.zIndex = this.totalPages - index;
+        });
+        
+        document.getElementById('totalPages').textContent = this.totalPages;
+        this.updateLoadingInfo();
+      }
+      
+      setupLazyLoading() {
+        this.checkAndPreloadGroups();
+      }
+      
+      getGroupForPage(pageIndex) {
+        return Math.floor(pageIndex / this.loadGroupSize);
+      }
+      
+      getPagesInGroup(groupIndex) {
+        const start = groupIndex * this.loadGroupSize;
+        const end = Math.min(start + this.loadGroupSize, this.totalPages);
+        return Array.from({length: end - start}, (_, i) => start + i);
+      }
+      
+      loadGroup(groupIndex) {
+        if (this.loadedGroups.has(groupIndex) || groupIndex < 0 || groupIndex * this.loadGroupSize >= this.totalPages) {
+          return;
+        }
+        
+        this.loadedGroups.add(groupIndex);
+        const pagesToLoad = this.getPagesInGroup(groupIndex);
+        
+        pagesToLoad.forEach(pageIndex => {
+          this.loadPageImage(pageIndex);
+        });
+      }
+      
+      loadPageImage(pageIndex) {
+        const page = this.pages[pageIndex];
+        const img = page.querySelector('.page-image');
+        
+        if (img && img.dataset.src && !img.src) {
+          // Ajoute un loader
+          const loader = document.createElement('div');
+          loader.className = 'image-loader';
+          page.querySelector('.image-container').appendChild(loader);
+          
+          img.src = img.dataset.src;
+          
+          img.addEventListener('load', () => {
+            this.handleImageLoad(img, pageIndex);
+            this.updateLoadingInfo();
+          });
+          
+          img.addEventListener('error', () => {
+            console.warn(`Erreur de chargement: ${img.dataset.src}`);
+            this.updateLoadingInfo();
+          });
+        }
+      }
+      
+      handleImageLoad(img, pageIndex) {
+        // Supprime le loader
+        const loader = img.parentNode.querySelector('.image-loader');
+        if (loader) loader.remove();
+        
+        // Détermine l'orientation et applique la classe appropriée
+        const width = img.naturalWidth;
+        const height = img.naturalHeight;
+        
+        img.classList.remove('landscape', 'portrait', 'square');
+        
+        if (width > height) {
+          img.classList.add('landscape');
+        } else if (height > width) {
+          img.classList.add('portrait');
+        } else {
+          img.classList.add('square');
+        }
+        
+        // Marque la page comme chargée
+        img.classList.add('loaded');
+        img.parentNode.parentNode.classList.add('image-loaded');
+        
+        console.log(`Page ${pageIndex + 1} chargée: ${width}x${height} (${width > height ? 'paysage' : 'portrait'})`);
+      }
+      
+      checkAndPreloadGroups() {
+        const currentGroup = this.getGroupForPage(this.currentPage);
+        
+        // Charge le groupe actuel et les groupes suivants
+        for (let i = 0; i <= this.preloadAhead; i++) {
+          const group = currentGroup + i;
+          if (group * this.loadGroupSize < this.totalPages) {
+            this.loadGroup(group);
+          }
+        }
+        
+        // Charge le groupe précédent si on est près du début
+        if (currentGroup > 0 && this.currentPage % this.loadGroupSize < 3) {
+          this.loadGroup(currentGroup - 1);
+        }
+      }
+      
+      updateLoadingInfo() {
+        const loadedImages = Array.from(document.querySelectorAll('.page-image'))
+          .filter(img => img.complete && img.naturalHeight !== 0).length;
+        
+        const progress = (loadedImages / this.totalPages) * 100;
+        
+        document.getElementById('loadedInfo').textContent = 
+          `Chargement: ${loadedImages}/${this.totalPages} pages`;
+        
+        document.getElementById('progressFill').style.width = `${progress}%`;
+        
+        const loadHint = document.getElementById('loadHint');
+        if (progress < 100) {
+          loadHint.textContent = ` | Chargement: ${Math.round(progress)}%`;
+          loadHint.style.color = '#f39c12';
+        } else {
+          loadHint.textContent = ' | ✓ Toutes les pages sont chargées';
+          loadHint.style.color = '#2ecc71';
+        }
+      }
+      
+      setupNavigation() {
+        document.getElementById('prevBtn').addEventListener('click', () => this.turnPageBackward());
+        document.getElementById('nextBtn').addEventListener('click', () => this.turnPageForward());
+        document.getElementById('firstBtn').addEventListener('click', () => this.goToPage(0));
+        document.getElementById('lastBtn').addEventListener('click', () => this.goToPage(this.totalPages - 1));
+        
+        document.addEventListener('keydown', (e) => {
+          if (this.isAnimating) return;
+          
+          switch(e.key) {
+            case 'ArrowRight': case ' ': case 'PageDown':
+              e.preventDefault(); this.turnPageForward(); break;
+            case 'ArrowLeft': case 'PageUp':
+              e.preventDefault(); this.turnPageBackward(); break;
+            case 'Home': e.preventDefault(); this.goToPage(0); break;
+            case 'End': e.preventDefault(); this.goToPage(this.totalPages - 1); break;
+          }
+        });
+        
+        this.pages.forEach((page, index) => {
+          page.addEventListener('click', () => {
+            if (!this.isAnimating && index === this.currentPage) {
+              this.turnPageForward();
+            }
+          });
+        });
+      }
+      
+      turnPageForward() {
+        if (this.currentPage >= this.totalPages - 1 || this.isAnimating) return;
+        
+        this.isAnimating = true;
+        const currentPageElement = this.pages[this.currentPage];
+        
+        currentPageElement.classList.add('flipped');
+        currentPageElement.style.zIndex = this.currentPage + this.totalPages;
+        this.currentPage++;
+        
+        this.checkAndPreloadGroups();
+        this.updateUI();
+        
+        setTimeout(() => { this.isAnimating = false; }, 500);
+      }
+      
+      turnPageBackward() {
+        if (this.currentPage <= 0 || this.isAnimating) return;
+        
+        this.isAnimating = true;
+        this.currentPage--;
+        const pageToTurnBack = this.pages[this.currentPage];
+        
+        pageToTurnBack.classList.remove('flipped');
+        pageToTurnBack.style.zIndex = this.totalPages - this.currentPage;
+        
+        this.checkAndPreloadGroups();
+        this.updateUI();
+        
+        setTimeout(() => { this.isAnimating = false; }, 500);
+      }
+      
+      goToPage(pageIndex) {
+        if (pageIndex < 0 || pageIndex >= this.totalPages || this.isAnimating) return;
+        
+        this.isAnimating = true;
+        
+        this.pages.forEach((page, index) => {
+          if (index < pageIndex) {
+            page.classList.add('flipped');
+            page.style.zIndex = index + this.totalPages;
+          } else {
+            page.classList.remove('flipped');
+            page.style.zIndex = this.totalPages - index;
+          }
+        });
+        
+        this.currentPage = pageIndex;
+        this.checkAndPreloadGroups();
+        this.updateUI();
+        
+        setTimeout(() => { this.isAnimating = false; }, 3000);
+      }
+      
+      updateUI() {
+        document.getElementById('currentPage').textContent = this.currentPage + 1;
+        
+        const currentPageElement = document.getElementById('currentPage');
+        currentPageElement.style.transform = 'scale(1.2)';
+        setTimeout(() => { currentPageElement.style.transform = 'scale(1)'; }, 2000);
+        
+        this.updateNavigationButtons();
+      }
+      
+      updateNavigationButtons() {
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const firstBtn = document.getElementById('firstBtn');
+        const lastBtn = document.getElementById('lastBtn');
+        
+        const isFirstPage = this.currentPage === 0;
+        const isLastPage = this.currentPage === this.totalPages - 1;
+        
+        prevBtn.disabled = isFirstPage;
+        nextBtn.disabled = isLastPage;
+        firstBtn.disabled = isFirstPage;
+        lastBtn.disabled = isLastPage;
+      }
+    }
+
+    // Initialisation
+    document.addEventListener('DOMContentLoaded', () => {
+      document.body.style.opacity = '0';
+      document.body.style.transition = 'opacity 0.5s ease';
+      
+      setTimeout(() => {
+        document.body.style.opacity = '1';
+      }, 100);
+      
+      new ProfessionalCatalog();
+    });
+  </script>
+</body>
+</html>
